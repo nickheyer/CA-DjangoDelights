@@ -12,8 +12,8 @@ class Ingredient(models.Model):
     """
     name = models.CharField(name="name", unique=True, max_length=100)
     quantity = models.FloatField(name="quantity", default=0) #Quantity currently available in storage
-    unit_type = models.CharField(name="unittype", default="Ct", max_length=10)
-    price_per = models.FloatField(name="priceper", default=0.00)
+    unit_type = models.CharField(name="unittype", default="Ct", max_length=10, verbose_name="Unit Type")
+    price_per = models.FloatField(name="priceper", default=0.00, verbose_name="Price Per")
     image_link = models.CharField(name="image", default="https://icon-library.com/images/ingredient-icon/ingredient-icon-6.jpg", max_length=200)
     
     class Meta:
@@ -23,6 +23,9 @@ class Ingredient(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return "/ingredients"
 
 class MenuItem(models.Model):
     """

@@ -4,10 +4,11 @@ from typing import List
 from django.shortcuts import render
 from django.views.generic import ListView, TemplateView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
-from .models import Purchase, Ingredient, MenuItem, RecipeRequirement
 from django.http import Http404
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.decorators import login_required
+
+from .models import Purchase, Ingredient, MenuItem, RecipeRequirement
+from .forms import IngredientCreateForm
 
 
 # Create your views here.
@@ -20,6 +21,17 @@ class Home(TemplateView):
 class IngredientList(ListView, LoginRequiredMixin):
     model = Ingredient
     template_name = "inventory/ingredients.html"
+    fields = ("__all__")
+
+class IngredientCreate(CreateView, LoginRequiredMixin):
+    model = Ingredient
+    template_name = "inventory/ingredient_create_form.html"
+    fields = ("__all__")
+
+class IngredientUpdate(UpdateView, LoginRequiredMixin):
+    model = Ingredient
+    template_name = "inventory/ingredient_update_form.html"
+    fields = ("__all__")
 
 class IngredientDelete(DeleteView, LoginRequiredMixin):
     model = Ingredient
@@ -28,10 +40,22 @@ class IngredientDelete(DeleteView, LoginRequiredMixin):
 class MenuList(ListView, LoginRequiredMixin):
     model = MenuItem
     template_name = "inventory/menu.html"
+    fields = ("__all__")
+
+class MenuCreate(CreateView, LoginRequiredMixin):
+    model = MenuItem
+    template_name = "inventory/menu_create_form.html"
+    fields = ("__all__")
+
+class RecipeRequirementCreate(CreateView, LoginRequiredMixin):
+    model = RecipeRequirement
+    template_name = "inventory/reciperequirement_create_form.html"
+    fields = ("__all__")
 
 class PurchaseList(ListView, LoginRequiredMixin):
     model = Purchase
     template_name = "inventory/purchases.html"
+    fields = ("__all__")
 
     def revenue(self):
         total = 0
@@ -52,4 +76,9 @@ class PurchaseList(ListView, LoginRequiredMixin):
     def get_context_data(self,*args, **kwargs):
         context = {"revenue":self.revenue(), "cost":self.cost(), "profit": self.profit()}
         return context   
+
+class PurchaseCreate(CreateView, LoginRequiredMixin):
+    model = Purchase
+    template_name = "inventory/purchase_create_form.html"
+    fields = ("__all__")
 

@@ -5,3 +5,13 @@
     text-align: center;
     margin-top: 20px;
 }
+
+th {
+    margin:5px;
+    padding:15px;
+
+}
+
+.bordered {
+    border: 2px solild black;
+}

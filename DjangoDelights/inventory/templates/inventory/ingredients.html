@@ -4,5 +4,34 @@
 
 <div class="centered">
 
+<h1>
+    This is a list of currently available ingredients!
+</h1>
+<table class="centered">
+    <tr>
+        <th>Name</th>
+        <th>Quantity</th>
+        <th>Unit Type</th>
+        <th>Price Per Unit</th>
+        <th>Image</th>
+        <th>Edit Ingredient</th>
+        <th>Delete Ingredient</th>
+    </tr>
+        {% for item in object_list %}
+    <tr>
+        
+        <td>{{item.name}}</td>
+        <td>{{item.quantity}}</td>
+        <td>{{item.unittype}}</td>
+        <td>{{item.priceper}}</td>
+        <td><img src="{{item.image}}" height="50" width="50"></image></td>
+        <td style="padding-left: 15px;"><a href="{% url 'ingredientupdate' item.id %}">Edit</a></td>
+        <td style="padding-left: 15px;"><a href="{% url 'ingredientdelete' item.id %}">Delete</a></td>
+    </tr>
+        {% endfor %}
+</table>
+        <div>
+            <a style="margin-top: 30px;" href="{% url 'ingredientcreate' %}" class="btn btn-primary">Add Ingredient</a>
+        </div>
 </div>
 {% endblock %}
