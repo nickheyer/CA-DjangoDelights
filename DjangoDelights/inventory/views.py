@@ -1,14 +1,11 @@
-from ast import In
-from distutils.log import Log
-from typing import List
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import ListView, TemplateView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.http import Http404
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Purchase, Ingredient, MenuItem, RecipeRequirement
-from .forms import IngredientCreateForm
+from .forms import IngredientForm, PurchaseForm, RecipeRequirementForm, MenuItemForm
 
 
 # Create your views here.
@@ -21,21 +18,21 @@ class Home(TemplateView):
 class IngredientList(ListView, LoginRequiredMixin):
     model = Ingredient
     template_name = "inventory/ingredients.html"
-    fields = ("__all__")
 
 class IngredientCreate(CreateView, LoginRequiredMixin):
     model = Ingredient
+    form_class = IngredientForm
     template_name = "inventory/ingredient_create_form.html"
-    fields = ("__all__")
 
 class IngredientUpdate(UpdateView, LoginRequiredMixin):
     model = Ingredient
+    form_class = IngredientForm
     template_name = "inventory/ingredient_update_form.html"
-    fields = ("__all__")
-
+    
 class IngredientDelete(DeleteView, LoginRequiredMixin):
     model = Ingredient
-    success_url = "ingredients"
+    template_name = "inventory/ingredient_delete_form.html"
+    success_url = "/ingredients"
 
 class MenuList(ListView, LoginRequiredMixin):
     model = MenuItem
@@ -44,13 +41,13 @@ class MenuList(ListView, LoginRequiredMixin):
 
 class MenuCreate(CreateView, LoginRequiredMixin):
     model = MenuItem
+    form_class = MenuItemForm
     template_name = "inventory/menu_create_form.html"
-    fields = ("__all__")
 
 class RecipeRequirementCreate(CreateView, LoginRequiredMixin):
     model = RecipeRequirement
+    form_class = RecipeRequirementForm
     template_name = "inventory/reciperequirement_create_form.html"
-    fields = ("__all__")
 
 class PurchaseList(ListView, LoginRequiredMixin):
     model = Purchase
@@ -79,6 +76,6 @@ class PurchaseList(ListView, LoginRequiredMixin):
 
 class PurchaseCreate(CreateView, LoginRequiredMixin):
     model = Purchase
+    form_class = PurchaseForm
     template_name = "inventory/purchase_create_form.html"
-    fields = ("__all__")
 
