@@ -5,8 +5,15 @@
 <div class="centered">
 {% if user.is_authenticated %}
 <p>Welcome {{user.username}}!</p>
+<div>
+    <a href="{% url 'logout' %}" class="btn btn-primary">Logout</a>
+</div>
+
 {% else %}
 <p>Welcome guest!</p>
+<div>
+    <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
+</div>
 {% endif %}
 </div>
 {% endblock %}
