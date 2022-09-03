@@ -2,7 +2,57 @@
 
 {% block content %}
 
-<div class="centered">
+<div class="centered" style="margin:30px">
+<h1>
+    This is a list of currently available menu items!
+</h1>
+<table class="centered table table-bordered" >
+    <tr>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Recipe</th>
+        <th>Edit Item</th>
+        <th>Delete Item</th>
+    </tr>
+        {% for item in items %}
+    <tr>
+        
+        <td>{{item.model.name}}</td>
+        <td>{{item.model.price}}</td>
 
+
+        <td>
+            <table class="table" multiple aria-label="multiple select example">
+                <tbody>
+                {% for req in item.recipe %}
+                <tr>
+                    <td>
+                        {{req.ingredient}} | {{req.amount}} {{req.ingredient.unittype}}
+                    </td>
+                    <td>
+                        <a href="{% url 'requirement_update' req.id %}">Edit</a>
+                    </td>
+                    <td>
+                        <a href="{% url 'requirement_delete' req.id %}">Remove</a>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <div>
+                <a href="{% url 'requirement_create' %}">Add Requirement</a>
+            </div>
+
+        </td>
+
+
+        <td style="padding-left: 15px;"><a href="{% url 'menu_update' item.model.id %}">Edit</a></td>
+        <td style="padding-left: 15px;"><a href="{% url 'menu_delete' item.model.id %}">Delete</a></td>
+    </tr>
+        {% endfor %}
+</table>
+        <div>
+            <a style="margin-top: 15px;float:right;" href="{% url 'menu_create' %}" class="btn btn-primary">Add Item</a>
+        </div>
 </div>
 {% endblock %}

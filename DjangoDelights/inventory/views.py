@@ -34,20 +34,68 @@ class IngredientDelete(DeleteView, LoginRequiredMixin):
     template_name = "inventory/ingredient_delete_form.html"
     success_url = "/ingredients"
 
+
+
+
+
 class MenuList(ListView, LoginRequiredMixin):
     model = MenuItem
     template_name = "inventory/menu.html"
     fields = ("__all__")
+
+    def get_context_data(self, **kwargs):
+
+        m_items = list()
+        for x in MenuItem.objects.all():
+            m_item = dict()
+            m_item["model"] = x
+            m_item["recipe"] = list()
+            for y in RecipeRequirement.objects.all():
+                if y.menu_item == x:
+                    m_item["recipe"].append(y)
+            m_items.append(m_item)
+
+
+        ctx = super(MenuList, self).get_context_data(**kwargs)
+        ctx['items'] = m_items
+        return ctx
+
 
 class MenuCreate(CreateView, LoginRequiredMixin):
     model = MenuItem
     form_class = MenuItemForm
     template_name = "inventory/menu_create_form.html"
 
+class MenuUpdate(UpdateView, LoginRequiredMixin):
+    model = MenuItem
+    template_name = "inventory/menu_update_form.html"
+    fields = ("__all__")
+
+class MenuDelete(DeleteView, LoginRequiredMixin):
+    model = MenuItem
+    template_name = "inventory/menu_delete_form.html"
+    success_url = "/menu"
+
+
+
+
+
 class RecipeRequirementCreate(CreateView, LoginRequiredMixin):
     model = RecipeRequirement
     form_class = RecipeRequirementForm
     template_name = "inventory/reciperequirement_create_form.html"
+
+class RecipeRequirementUpdate(UpdateView, LoginRequiredMixin):
+    model = RecipeRequirement
+    form_class = RecipeRequirementForm
+    template_name = "inventory/reciperequirement_update_form.html"
+
+class RecipeRequirementDelete(DeleteView, LoginRequiredMixin):
+    model = RecipeRequirement
+    template_name = "inventory/reciperequirement_delete_form.html"
+    success_url = "/menu"
+
+
 
 class PurchaseList(ListView, LoginRequiredMixin):
     model = Purchase
@@ -71,11 +119,29 @@ class PurchaseList(ListView, LoginRequiredMixin):
         return self.revenue() - self.cost()
 
     def get_context_data(self,*args, **kwargs):
-        context = {"revenue":self.revenue(), "cost":self.cost(), "profit": self.profit()}
-        return context   
+
+        purchases = list()
+        for x in Purchase.objects.all():
+            purchase = dict()
+            purchase["model"] = x
+            purchase["cost"] = 0
+            for y in x.menu_item.reciperequirement_set.all():
+                purchase["cost"] += y.amount*y.ingredient.priceper
+            purchase["profit"] = x.menu_item.price - purchase["cost"]
+            purchases.append(purchase)
+        ctx = super(PurchaseList, self).get_context_data(**kwargs)
+        ctx["revenue"] = self.revenue()
+        ctx["cost"] = self.cost()
+        ctx["profit"] = self.profit()
+        ctx["purchases"] = purchases
+        return ctx   
 
 class PurchaseCreate(CreateView, LoginRequiredMixin):
     model = Purchase
     form_class = PurchaseForm
     template_name = "inventory/purchase_create_form.html"
 
+class PurchaseDelete(DeleteView, LoginRequiredMixin):
+    model = Purchase
+    template_name = "inventory/purchase_delete_form.html"
+    success_url = "/purchases"

@@ -39,6 +39,9 @@ class MenuItem(models.Model):
     
     def __str__(self):
         return self.name
+    
+    def get_absolute_url(self):
+        return "/menu"
 
 class RecipeRequirement(models.Model):
     """
@@ -47,7 +50,7 @@ class RecipeRequirement(models.Model):
     
     menu_item = models.ForeignKey(MenuItem, on_delete=models.CASCADE)
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
-    amount = models.FloatField(name="amount")
+    amount = models.FloatField(name="amount", )
     
     class Meta:
         verbose_name = "Recipe Requirement"
@@ -55,6 +58,9 @@ class RecipeRequirement(models.Model):
     
     def __str__(self):
         return f"{self.menu_item} | {self.ingredient} | {self.amount}"
+    
+    def get_absolute_url(self):
+        return "/menu"
 
 class Purchase(models.Model):
     """
@@ -70,3 +76,6 @@ class Purchase(models.Model):
 
     def __str__(self):
         return f"{self.timestamp} | {self.menu_item} | {self.customer}"
+    
+    def get_absolute_url(self):
+        return "/purchases"

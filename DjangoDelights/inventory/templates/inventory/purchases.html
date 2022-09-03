@@ -2,7 +2,52 @@
 
 {% block content %}
 
-<div class="centered">
-<p>Our current projected revenue is ${{revenue}} in total.</p>
+<div class="centered" style="margin:30px">
+
+
+<table class="centered table table-bordered">
+    <tr>
+        <th>Customer</th>
+        <th>Time</th>
+        <th>Item</th>
+        <th>Revenue</th>
+        <th>Cost</th>
+        <th>Profit</th>
+        <th>Delete</th>
+    </tr>
+        {% for item in purchases %}
+    <tr>
+        
+        <td>{{item.model.customer}}</td>
+        <td>{{item.model.timestamp}}</td>
+        <td>{{item.model.menu_item.name}}</td>
+        <td>${{item.model.menu_item.price}}</td>
+        <td>${{item.cost}}</td>
+        <td>${{item.profit}}</td>
+        <td style="padding-left: 15px;"><a href="{% url 'purchase_delete' item.model.id %}">X</a></td>
+    </tr>
+        {% endfor %}
+</table>
+
+<div>
+    <a style="float:right" href="{% url 'purchase_create' %}" class="btn btn-primary">Create Purchase</a>
+</div>
+
+
+<table class="table table-bordered" style="float:left;max-width:50%">
+    <tr>
+        <th>Total Revenue</th>
+        <td>${{revenue}}</td>
+    </tr>
+    <tr>
+        <th>Total Cost</th>
+        <td>${{cost}}</td>
+    </tr>
+    <tr>
+        <th>Total Profit</th>
+        <td>${{profit}}</td>
+    </tr>
+</table>
+
 </div>
 {% endblock %}
